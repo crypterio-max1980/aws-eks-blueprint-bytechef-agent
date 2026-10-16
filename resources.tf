@@ -20,14 +20,9 @@ module "keda" {
   depends_on = [module.kong]
 }
 
-module "minio" {
-  source = "./modules/minio"
-  depends_on = [module.keda]
-}
-
 module "prometheus" {
   source = "./modules/prometheus"
-  depends_on = [module.minio]
+  depends_on = [module.keda]
 }
 
 module "grafana" {
@@ -35,12 +30,7 @@ module "grafana" {
   depends_on = [module.prometheus]
 }
 
-module "weaviate" {
-  source = "./modules/weaviate"
-  depends_on = [module.grafana]
-}
-
 module "ingress" {
   source = "./modules/ingress"
-  depends_on = [module.weaviate]
+  depends_on = [module.grafana]
 }
